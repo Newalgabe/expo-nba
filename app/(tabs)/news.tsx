@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  RefreshControl,
-  ActivityIndicator,
-  TouchableOpacity,
-  Image,
-  Linking,
-  Modal,
-} from 'react-native';
-import axios from 'axios';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator,
+    Image,
+    Linking,
+    Modal,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
 interface NewsArticle {
   id: string;
@@ -104,7 +104,14 @@ export default function NewsScreen() {
     return (
       <TouchableOpacity
         key={article.id}
-        style={[styles.articleCard, { backgroundColor: Colors[colorScheme ?? 'light'].card }]}
+        style={[
+          styles.articleCard,
+          { 
+            backgroundColor: Colors[colorScheme ?? 'light'].background,
+            borderWidth: 1,
+            borderColor: Colors[colorScheme ?? 'light'].border
+          }
+        ]}
         onPress={() => handleArticlePress(article)}
       >
         {imageUrl && (
@@ -121,7 +128,7 @@ export default function NewsScreen() {
               {formatDate(article.published)}
             </ThemedText>
             {categoryText && (
-              <View style={[styles.categoryBadge, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]}> {/* Use themed tint */}
+              <View style={[styles.categoryBadge, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]}>
                 <ThemedText style={styles.categoryText}>
                   {categoryText}
                 </ThemedText>
@@ -156,7 +163,6 @@ export default function NewsScreen() {
         visible={isArticleModalVisible}
         onRequestClose={() => setIsArticleModalVisible(false)}
       >
-        {/* ThemedView should handle the primary background of the modal */}
         <ThemedView style={styles.modalContainer}> 
           <ScrollView contentContainerStyle={styles.modalScrollViewContent}>
             {imageUrl && (
@@ -177,8 +183,8 @@ export default function NewsScreen() {
                   {formatDate(selectedArticle.published)}
                 </ThemedText>
                 {categoryText && (
-                  <View style={[styles.categoryBadge, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]}> {/* Use themed tint */}
-                    <ThemedText style={styles.categoryText}>
+                  <View style={[styles.categoryBadge, { backgroundColor: '#333' }]}>
+                    <ThemedText style={[styles.categoryText, { color: '#fff' }]}>
                       {categoryText}
                     </ThemedText>
                   </View>
@@ -199,18 +205,18 @@ export default function NewsScreen() {
 
           <View style={[styles.modalFooter, { borderTopColor: Colors[colorScheme ?? 'light'].border, backgroundColor: Colors[colorScheme ?? 'light'].background }]}>
             <TouchableOpacity 
-              style={[styles.modalExternalLinkButton, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} 
+              style={[styles.modalExternalLinkButton, { backgroundColor: '#333' }]} 
               onPress={() => handleOpenExternalLink(selectedArticle.links.web.href)}
             >
-              <ThemedText style={styles.modalExternalLinkButtonText}>
+              <ThemedText style={[styles.modalExternalLinkButtonText, { color: '#fff' }]}>
                 Read Full Article on ESPN.com
               </ThemedText>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={[styles.modalCloseButton, { backgroundColor: Colors[colorScheme ?? 'light'].border }]} 
+              style={[styles.modalCloseButton, { backgroundColor: '#444' }]} 
               onPress={() => setIsArticleModalVisible(false)}
             >
-              <ThemedText style={[styles.modalCloseButtonText, { color: Colors[colorScheme ?? 'light'].text }]}>
+              <ThemedText style={[styles.modalCloseButtonText, { color: '#fff' }]}>
                 Close
               </ThemedText>
             </TouchableOpacity>
@@ -232,7 +238,7 @@ export default function NewsScreen() {
   if (error) {
     return (
       <ThemedView style={[styles.container, styles.centerContent]}>
-        <View style={[styles.header, { borderBottomColor: Colors[colorScheme ?? 'light'].border }]}> {/* Apply themed border */}
+        <View style={[styles.header, { borderBottomColor: Colors[colorScheme ?? 'light'].border }]}>
             <ThemedText type="title" style={styles.title}>NBA News</ThemedText>
             <ThemedText type="default" style={styles.subtitle}>Latest updates</ThemedText>
         </View>
@@ -246,7 +252,7 @@ export default function NewsScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <View style={[styles.header, { borderBottomColor: Colors[colorScheme ?? 'light'].border }]}> {/* Apply themed border */}
+      <View style={[styles.header, { borderBottomColor: Colors[colorScheme ?? 'light'].border }]}>
         <ThemedText type="title" style={styles.title}>NBA News</ThemedText>
         <ThemedText type="default" style={styles.subtitle}>Latest updates</ThemedText>
       </View>
@@ -264,7 +270,10 @@ export default function NewsScreen() {
           <View style={styles.noNewsContainer}>
             <ThemedText style={styles.noNewsText}>No news available at the moment.</ThemedText>
             <ThemedText style={styles.noNewsSubText}>Pull down to refresh or check back later.</ThemedText>
-            <TouchableOpacity style={[styles.retryButton, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} onPress={fetchNews}>
+            <TouchableOpacity 
+              style={[styles.retryButton, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} 
+              onPress={fetchNews}
+            >
               <ThemedText style={styles.retryText}>Refresh Now</ThemedText>
             </TouchableOpacity>
           </View>
@@ -290,7 +299,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 15,
     borderBottomWidth: 1,
-    // borderBottomColor handled inline
   },
   title: {
     fontSize: 30,
@@ -327,7 +335,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     elevation: 2,
-    // backgroundColor handled inline
   },
   retryText: {
     color: '#FFFFFF',
@@ -372,7 +379,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 10,
-    // backgroundColor handled inline
   },
   categoryText: {
     fontSize: 9,
@@ -409,11 +415,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-
   modalContainer: {
     flex: 1,
     paddingTop: 50,
-    // backgroundColor handled by ThemedView
   },
   modalScrollViewContent: {
     flexGrow: 1,
@@ -461,7 +465,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderTopWidth: 1,
-    // borderTopColor and backgroundColor handled inline
     flexDirection: 'column',
     gap: 10,
   },
@@ -469,7 +472,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
-    // backgroundColor handled inline
   },
   modalExternalLinkButtonText: {
     color: 'white',
@@ -480,11 +482,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
-    // backgroundColor handled inline
   },
   modalCloseButtonText: {
     fontWeight: 'bold',
     fontSize: 16,
-    // color handled inline
   },
 });

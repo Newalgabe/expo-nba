@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  RefreshControl,
-  ActivityIndicator,
-  TouchableOpacity,
-  Modal, // Added
-  Image, // Added
-  // Text, // ThemedText is used primarily
-} from 'react-native';
-import axios from 'axios';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator, // Added
+    Image,
+    Modal,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
 interface ESPNTeam {
   id: string;
@@ -341,14 +340,17 @@ export default function ScheduleScreen() {
     const gameToDisplay = detailedGameData?.header || selectedGameForDetail;
 
     if (!gameToDisplay) {
-        return (
-            <View style={[styles.modalContainer, styles.centerContent]}>
-                <ThemedText style={styles.modalErrorText}>Error: Essential game data is missing.</ThemedText>
-                <TouchableOpacity style={styles.modalCloseButton} onPress={() => setIsDetailModalVisible(false)}>
-                   <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
-                </TouchableOpacity>
-            </View>
-        );
+      return (
+        <View style={[styles.modalContainer, styles.centerContent]}>
+          <ThemedText style={styles.modalErrorText}>Error: Essential game data is missing.</ThemedText>
+          <TouchableOpacity 
+            style={[styles.modalCloseButton, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} 
+            onPress={() => setIsDetailModalVisible(false)}
+          >
+            <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
+          </TouchableOpacity>
+        </View>
+      );
     }
 
     const competition = gameToDisplay.competitions?.[0];
@@ -473,32 +475,50 @@ export default function ScheduleScreen() {
 
             {/* Team Stats Section */}
             {(detailedGameData.boxscore?.teams && detailedGameData.boxscore.teams.length > 0 && detailedGameData.boxscore.teams.some(ts => ts.statistics?.length > 0)) ? (
-                <>
+              <>
                 <ThemedText type="subtitle" style={styles.modalSectionTitle}>Team Statistics</ThemedText>
                 {detailedGameData.boxscore.teams.map(teamBoxScore => (
                   (teamBoxScore.statistics?.length > 0) && 
-                    <View key={teamBoxScore.team.id} style={styles.teamStatsContainer}>
-                        <View style={styles.lineupTeamHeader}>
-                            {teamBoxScore.team.logo && <Image source={{uri: teamBoxScore.team.logo}} style={styles.modalTeamLogoSmall} />}
-                            <ThemedText type="defaultSemiBold" style={styles.lineupTeamName}>{teamBoxScore.team.displayName}</ThemedText>
+                    <View 
+                      key={teamBoxScore.team.id} 
+                      style={[
+                        styles.teamStatsContainer,
+                        { 
+                          backgroundColor: Colors[colorScheme ?? 'light'].card,
+                          borderColor: Colors[colorScheme ?? 'light'].border
+                        }
+                      ]}
+                    >
+                      <View style={styles.lineupTeamHeader}>
+                        {teamBoxScore.team.logo && <Image source={{uri: teamBoxScore.team.logo}} style={styles.modalTeamLogoSmall} />}
+                        <ThemedText type="defaultSemiBold" style={styles.lineupTeamName}>{teamBoxScore.team.displayName}</ThemedText>
+                      </View>
+                      {teamBoxScore.statistics.map(stat => (
+                        <View 
+                          key={stat.name} 
+                          style={[
+                            styles.statRow,
+                            { borderBottomColor: Colors[colorScheme ?? 'light'].border }
+                          ]}
+                        >
+                          <ThemedText style={styles.statLabel}>{stat.label}:</ThemedText>
+                          <ThemedText style={styles.statValue}>{stat.displayValue}</ThemedText>
                         </View>
-                        {teamBoxScore.statistics.map(stat => (
-                        <View key={stat.name} style={styles.statRow}>
-                            <ThemedText style={styles.statLabel}>{stat.label}:</ThemedText>
-                            <ThemedText style={styles.statValue}>{stat.displayValue}</ThemedText>
-                        </View>
-                        ))}
+                      ))}
                     </View>
                 ))}
-                </>
+              </>
             ) : (
-                 gameToDisplay.status?.type?.state !== 'pre' && 
-                 <ThemedText type="subtitle" style={styles.modalSectionTitle}>Team Statistics not yet available</ThemedText>
+              gameToDisplay.status?.type?.state !== 'pre' && 
+              <ThemedText type="subtitle" style={styles.modalSectionTitle}>Team Statistics not yet available</ThemedText>
             )}
           </>
         )}
-        <TouchableOpacity style={styles.modalCloseButton} onPress={() => setIsDetailModalVisible(false)}>
-           <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
+        <TouchableOpacity 
+          style={[styles.modalCloseButton, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} 
+          onPress={() => setIsDetailModalVisible(false)}
+        >
+          <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
         </TouchableOpacity>
       </ScrollView>
     );
@@ -585,10 +605,9 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 20,
-    paddingTop: 50, // SafeArea for top
+    paddingTop: 50,
     paddingBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.light.border, // Using existing border color from theme
   },
   title: {
     fontSize: 30, // Adjusted
@@ -814,16 +833,16 @@ const styles = StyleSheet.create({
   lineupTeamHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   modalTeamLogoSmall: {
-    width: 28,
-    height: 28,
-    marginRight: 8,
+    width: 30,
+    height: 30,
+    marginRight: 10,
     resizeMode: 'contain',
   },
   lineupTeamName: {
-    fontSize: 17, // type="defaultSemiBold"
+    fontSize: 18,
     fontWeight: '600',
   },
   lineupSubheader: {
@@ -848,24 +867,25 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   teamStatsContainer: {
-    marginBottom: 20,
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
+    borderWidth: 1,
   },
   statRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 4,
-    marginLeft: 10,
+    alignItems: 'center',
+    paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)', // Lighter border
   },
   statLabel: {
     fontSize: 14,
-    color: 'rgba(255,255,255,0.9)', // Brighter text
+    opacity: 0.8,
   },
   statValue: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#FFFFFF', // Pure white for values
+    fontWeight: '600',
   },
   modalCloseButton: {
     marginTop: 30,
