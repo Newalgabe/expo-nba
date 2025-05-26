@@ -230,7 +230,7 @@ export default function TeamsScreen() {
 
   useEffect(() => {
     fetchTodaysGames();
-  }, []);
+  }, []); 
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -376,18 +376,22 @@ export default function TeamsScreen() {
                 </View>
               )}
 
-              {/* Over/Under */}
-              {item.overUnder && (
-                <View style={styles.oddsStat}>
-                  <ThemedText style={styles.oddsLabel}>O/U</ThemedText>
-                  <ThemedText style={styles.oddsValue}>
-                    Total: {item.overUnder.total}
-                  </ThemedText>
-                  <ThemedText style={styles.oddsValue}>
-                    O: {formatOdds(item.overUnder.overOdds)} | U: {formatOdds(item.overUnder.underOdds)}
-                  </ThemedText>
-                </View>
-              )}
+{/* Over/Under */}
+{item.overUnder && (
+  <View style={styles.oddsStat}>
+    <ThemedText style={styles.oddsLabel}>O/U</ThemedText>
+    <ThemedText style={styles.oddsValue}>
+      Total: {item.overUnder.total}
+    </ThemedText>
+    <ThemedText style={styles.oddsValue}>
+      Over Odds: {formatOdds(item.overUnder.overOdds)}
+    </ThemedText>
+    <ThemedText style={styles.oddsValue}>
+      Under Odds: {formatOdds(item.overUnder.underOdds)}
+    </ThemedText>
+  </View>
+)}
+
             </View>
           </View>
         )}

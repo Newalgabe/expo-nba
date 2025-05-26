@@ -340,17 +340,17 @@ export default function ScheduleScreen() {
     const gameToDisplay = detailedGameData?.header || selectedGameForDetail;
 
     if (!gameToDisplay) {
-      return (
-        <View style={[styles.modalContainer, styles.centerContent]}>
-          <ThemedText style={styles.modalErrorText}>Error: Essential game data is missing.</ThemedText>
+        return (
+            <View style={[styles.modalContainer, styles.centerContent]}>
+                <ThemedText style={styles.modalErrorText}>Error: Essential game data is missing.</ThemedText>
           <TouchableOpacity 
             style={[styles.modalCloseButton, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} 
             onPress={() => setIsDetailModalVisible(false)}
           >
-            <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
-          </TouchableOpacity>
-        </View>
-      );
+                   <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
+                </TouchableOpacity>
+            </View>
+        );
     }
 
     const competition = gameToDisplay.competitions?.[0];
@@ -475,7 +475,7 @@ export default function ScheduleScreen() {
 
             {/* Team Stats Section */}
             {(detailedGameData.boxscore?.teams && detailedGameData.boxscore.teams.length > 0 && detailedGameData.boxscore.teams.some(ts => ts.statistics?.length > 0)) ? (
-              <>
+                <>
                 <ThemedText type="subtitle" style={styles.modalSectionTitle}>Team Statistics</ThemedText>
                 {detailedGameData.boxscore.teams.map(teamBoxScore => (
                   (teamBoxScore.statistics?.length > 0) && 
@@ -489,11 +489,11 @@ export default function ScheduleScreen() {
                         }
                       ]}
                     >
-                      <View style={styles.lineupTeamHeader}>
-                        {teamBoxScore.team.logo && <Image source={{uri: teamBoxScore.team.logo}} style={styles.modalTeamLogoSmall} />}
-                        <ThemedText type="defaultSemiBold" style={styles.lineupTeamName}>{teamBoxScore.team.displayName}</ThemedText>
-                      </View>
-                      {teamBoxScore.statistics.map(stat => (
+                        <View style={styles.lineupTeamHeader}>
+                            {teamBoxScore.team.logo && <Image source={{uri: teamBoxScore.team.logo}} style={styles.modalTeamLogoSmall} />}
+                            <ThemedText type="defaultSemiBold" style={styles.lineupTeamName}>{teamBoxScore.team.displayName}</ThemedText>
+                        </View>
+                        {teamBoxScore.statistics.map(stat => (
                         <View 
                           key={stat.name} 
                           style={[
@@ -501,16 +501,16 @@ export default function ScheduleScreen() {
                             { borderBottomColor: Colors[colorScheme ?? 'light'].border }
                           ]}
                         >
-                          <ThemedText style={styles.statLabel}>{stat.label}:</ThemedText>
-                          <ThemedText style={styles.statValue}>{stat.displayValue}</ThemedText>
+                            <ThemedText style={styles.statLabel}>{stat.label}:</ThemedText>
+                            <ThemedText style={styles.statValue}>{stat.displayValue}</ThemedText>
                         </View>
-                      ))}
+                        ))}
                     </View>
                 ))}
-              </>
+                </>
             ) : (
-              gameToDisplay.status?.type?.state !== 'pre' && 
-              <ThemedText type="subtitle" style={styles.modalSectionTitle}>Team Statistics not yet available</ThemedText>
+                 gameToDisplay.status?.type?.state !== 'pre' && 
+                 <ThemedText type="subtitle" style={styles.modalSectionTitle}>Team Statistics not yet available</ThemedText>
             )}
           </>
         )}
@@ -518,7 +518,7 @@ export default function ScheduleScreen() {
           style={[styles.modalCloseButton, { backgroundColor: Colors[colorScheme ?? 'light'].tint }]} 
           onPress={() => setIsDetailModalVisible(false)}
         >
-          <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
+           <ThemedText style={styles.modalCloseButtonText}>Close</ThemedText>
         </TouchableOpacity>
       </ScrollView>
     );
